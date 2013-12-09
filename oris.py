@@ -26,7 +26,7 @@ class ORIS(object):
         return req._query(url)
 
     def getEventList(self, all=None, name=None, sport=None, rg=None, datefrom=None, dateto=None):
-        url = self._make_request("getEventList", {"all":all, "name"=name, "sport"=sport, "rg"=rg, "detafrom":datefrom, "datato"=dateto})
+        url = self._make_request("getEventList", {"all":all, "name":name, "sport":sport, "rg":rg, "detafrom":datefrom, "datato":dateto})
         return req._query(url)
 
     def getEvent(self, id):
