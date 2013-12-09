@@ -8,14 +8,21 @@ import urllib2
 import urllib
 import json
 
-
 class ORIS(object):
     """Implementation of the ORIS API (http://oris.orientacnisporty.cz/API)
     """
 
+
     def __init__(self, format="json", uri="http://oris.orientacnisporty.cz/API/"):
-       self.format = format
-       self.uri = uri
+        self.format = format
+        self.uri = uri
+
+        self.parsers = {"json":self._parse_json}
+
+        if self.format in self.parsers:
+            self.parse_output = self.parsers[self.format]
+        else:
+            self.parse_output = lambda x: x
 
     def getCSOSClubList(self):
         url = self._make_request("getCSOSClubList")
@@ -44,6 +51,32 @@ class ORIS(object):
     def getUser(self, rgnum):
         url = self._make_request("getUser", {"rgnum":rgnum})
         return self._query(url)
+
+    def _parse_xml(self, res):
+        """Parse XML response.
+
+        Arguments:
+            res     : {string}
+                      ORIS API response in XML format.
+        Returns:
+            status  : {string}
+            content :
+        """
+        pass
+
+    def _parse_json(self, res):
+        """Parse JSON response.
+
+        Arguments:
+            res     : {string}
+                      ORIS API response in JSON format.
+
+        Returns:
+            status  : {string}
+            data    : {JSON dict}
+        """
+        db = json.loads(res)
+        return db["Status"], db['Data']
 
     def _make_request(self, method, params={}):
         args = dict([("format",self.format), ("method",method)] + params.items())
