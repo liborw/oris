@@ -13,10 +13,19 @@ OB = 1
 LOB = 2
 MTBO = 3
 
+class ORISError(Exception):
+
+    def __init__(self, msg):
+        self.msg = msg
+
+    def __str__(self):
+        return "ORISError: " + msg
+
+
 class ORIS(object):
     """Implementation of the ORIS API (http://oris.orientacnisporty.cz/API)"""
 
-    def __init__(self, format="json", uri="http://oris.orientacnisporty.cz/API/"):
+    def __init__(self, format="json", uri="http://oris.orientacnisporty.cz/API/", parse=False):
         """Initialize ORIS API
 
         Arguments:
@@ -28,15 +37,19 @@ class ORIS(object):
 
         self.parsers = {"json":self._parse_json}
 
-        if self.format in self.parsers:
-            self.parse_output = self.parsers[self.format]
+        if parse and self.format in self.parsers:
+            self._parse_output = self.parsers[self.format]
         else:
-            self.parse_output = lambda x: x
+            self._parse_output = lambda x: ("OK",x)
 
     def getCSOSClubList(self):
         """Get list of all CSOS clubs."""
         url = self._make_request("getCSOSClubList")
-        return self._query(url)
+        status, data = self._parse_output(self._query(url))
+        if status == "OK":
+            return data
+        else:
+            raise ORISError(status)
 
     def getClub(self, id):
         """Get single club.
@@ -46,7 +59,11 @@ class ORIS(object):
                       Club id or shortcut.
         """
         url = self._make_request("getClub", {"id":id})
-        return self._query(url)
+        status, data = self._parse_output(self._query(url))
+        if status == "OK":
+            return data
+        else:
+            raise ORISError(status)
 
     def getEventList(self, all=None, name=None, sport=None, rg=None, datefrom=None, dateto=None):
         """Get list of events.
@@ -60,7 +77,11 @@ class ORIS(object):
             dateto      : {}
         """
         url = self._make_request("getEventList", {"all":all, "name":name, "sport":sport, "rg":rg, "detafrom":datefrom, "datato":dateto})
-        return self._query(url)
+        status, data = self._parse_output(self._query(url))
+        if status == "OK":
+            return data
+        else:
+            raise ORISError(status)
 
     def getEvent(self, id):
         """Get single event.
@@ -69,7 +90,11 @@ class ORIS(object):
             id          : {int}
         """
         url = self._make_request("getEvent", {"id":id})
-        return self._query(url)
+        status, data = self._parse_output(self._query(url))
+        if status == "OK":
+            return data
+        else:
+            raise ORISError(status)
 
     def getEventEntries(self, eventid, classid=None, classname=None, clubid=None, entrystop=None, entrystopout=None):
         """List of entries for particular event.
@@ -82,7 +107,11 @@ class ORIS(object):
             entrystopout    : {int}
         """
         url = self._make_request("getEventEntries", {"eventid":eventid, "classid":classid, "classname":classname, "clubid":clubid, "entrystop":entrystop, "entrystopout":entrystopout})
-        return self._query(url)
+        status, data = self._parse_output(self._query(url))
+        if status == "OK":
+            return data
+        else:
+            raise ORISError(status)
 
     def getEventResults(self, eventid, classid=None, classname=None, clubid=None):
         """Results for particular event.
@@ -94,7 +123,11 @@ class ORIS(object):
             clubid          : {int}
         """
         url = self._make_request("getEventResults", {"eventid":eventid, "classid":classid, "classname":classname, "clubid":clubid})
-        return self._query(url)
+        status, data = self._parse_output(self._query(url))
+        if status == "OK":
+            return data
+        else:
+            raise ORISError(status)
 
     def getUser(self, rgnum):
         """Get registered user.
@@ -104,7 +137,11 @@ class ORIS(object):
                               Registration number CCXXXX.
         """
         url = self._make_request("getUser", {"rgnum":rgnum})
-        return self._query(url)
+        status, data = self._parse_output(self._query(url))
+        if status == "OK":
+            return data
+        else:
+            raise ORISError(status)
 
     def _parse_xml(self, res):
         """Parse XML response.
