@@ -34,7 +34,7 @@ class ORIS(object):
         return self._query(url)
 
     def getEventEntries(self, eventid, classid=None, classname=None, clubid=None, entrystop=None, entrystopout=None):
-        url = self._make_request("getEventEntries", {"eventid":eventid, "classid":classid, "calssname":classname, "clubid":clubid, "entrystop":entrystop, "entrystopout":entrystopout})
+        url = self._make_request("getEventEntries", {"eventid":eventid, "classid":classid, "classname":classname, "clubid":clubid, "entrystop":entrystop, "entrystopout":entrystopout})
         return self._query(url)
 
     def getEventResults(self, eventid, classid=None, classname=None, clubid=None):
