@@ -8,12 +8,21 @@ import urllib2
 import urllib
 import json
 
-class ORIS(object):
-    """Implementation of the ORIS API (http://oris.orientacnisporty.cz/API)
-    """
 
+OB = 1
+LOB = 2
+MTBO = 3
+
+class ORIS(object):
+    """Implementation of the ORIS API (http://oris.orientacnisporty.cz/API)"""
 
     def __init__(self, format="json", uri="http://oris.orientacnisporty.cz/API/"):
+        """Initialize ORIS API
+
+        Arguments:
+            format      : {string}, optional, default: json
+            uri         : {string}, optional, default: http://oris.orientacnisporty.cz/API/
+        """
         self.format = format
         self.uri = uri
 
@@ -25,30 +34,75 @@ class ORIS(object):
             self.parse_output = lambda x: x
 
     def getCSOSClubList(self):
+        """Get list of all CSOS clubs."""
         url = self._make_request("getCSOSClubList")
         return self._query(url)
 
     def getClub(self, id):
+        """Get single club.
+
+        Arguments:
+            id      : {int}
+                      Club id or shortcut.
+        """
         url = self._make_request("getClub", {"id":id})
         return self._query(url)
 
     def getEventList(self, all=None, name=None, sport=None, rg=None, datefrom=None, dateto=None):
+        """Get list of events.
+
+        Arguments:
+            all         : {}, optional
+            name        : {string}, optional
+            sport       : {int}, optional
+            rg          : {string}
+            datefrom    : {}
+            dateto      : {}
+        """
         url = self._make_request("getEventList", {"all":all, "name":name, "sport":sport, "rg":rg, "detafrom":datefrom, "datato":dateto})
         return self._query(url)
 
     def getEvent(self, id):
+        """Get single event.
+
+        Arguments:
+            id          : {int}
+        """
         url = self._make_request("getEvent", {"id":id})
         return self._query(url)
 
     def getEventEntries(self, eventid, classid=None, classname=None, clubid=None, entrystop=None, entrystopout=None):
+        """List of entries for particular event.
+
+        Arguments:
+            eventid         : {int}
+            classid         : {int}
+            classname       : {string}
+            entrustop       : {int}
+            entrystopout    : {int}
+        """
         url = self._make_request("getEventEntries", {"eventid":eventid, "classid":classid, "classname":classname, "clubid":clubid, "entrystop":entrystop, "entrystopout":entrystopout})
         return self._query(url)
 
     def getEventResults(self, eventid, classid=None, classname=None, clubid=None):
+        """Results for particular event.
+
+        Arguments:
+            eventid         : {int}
+            classid         : {int}
+            classname       : {string}
+            clubid          : {int}
+        """
         url = self._make_request("getEventResults", {"eventid":eventid, "classid":classid, "classname":classname, "clubid":clubid})
         return self._query(url)
 
     def getUser(self, rgnum):
+        """Get registered user.
+
+        Arguments:
+            rgnum           : {int}
+                              Registration number CCXXXX.
+        """
         url = self._make_request("getUser", {"rgnum":rgnum})
         return self._query(url)
 
