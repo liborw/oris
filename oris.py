@@ -49,8 +49,8 @@ class ORIS(object):
         args = dict([("format",self.format), ("method",method)] + params.items())
         args = dict((k, v) for k, v in args.iteritems() if v)
         url = urllib.urlencode(args)
-        print self.uri + "?" + url
+        return self.uri + "?" + url
 
     def _query(self, url):
-        req = usrllib2.urlopen(url)
-        return req.read()
+        res = urllib2.urlopen(url)
+        return res.read()
