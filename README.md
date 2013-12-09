@@ -7,7 +7,6 @@ Python implementation of the ORIS API (http://oris.orientacnisporty.cz)
 TODO
 ----
 
-- Output parsing for both XML and JSON
+- Output parsing for XML
 - Date format
 - Logging
-- Documentation
