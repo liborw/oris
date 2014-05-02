@@ -19,7 +19,7 @@ class ORISError(Exception):
         self.msg = msg
 
     def __str__(self):
-        return "ORISError: " + msg
+        return "ORISError: " + self.msg
 
 
 class ORIS(object):
