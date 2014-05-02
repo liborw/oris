@@ -13,6 +13,7 @@ OB = 1
 LOB = 2
 MTBO = 3
 
+
 class ORISError(Exception):
 
     def __init__(self, msg):
@@ -35,12 +36,12 @@ class ORIS(object):
         self.format = format
         self.uri = uri
 
-        self.parsers = {"json":self._parse_json}
+        self.parsers = {"json": self._parse_json}
 
         if parse and self.format in self.parsers:
             self._parse_output = self.parsers[self.format]
         else:
-            self._parse_output = lambda x: ("OK",x)
+            self._parse_output = lambda x: ("OK", x)
 
     def getCSOSClubList(self):
         """Get list of all CSOS clubs."""
@@ -58,7 +59,7 @@ class ORIS(object):
             id      : {int}
                       Club id or shortcut.
         """
-        url = self._make_request("getClub", {"id":id})
+        url = self._make_request("getClub", {"id": id})
         status, data = self._parse_output(self._query(url))
         if status == "OK":
             return data
@@ -76,7 +77,7 @@ class ORIS(object):
             datefrom    : {}
             dateto      : {}
         """
-        url = self._make_request("getEventList", {"all":all, "name":name, "sport":sport, "rg":rg, "detafrom":datefrom, "datato":dateto})
+        url = self._make_request("getEventList", {"all": all, "name": name, "sport": sport, "rg": rg, "detafrom": datefrom, "datato": dateto})
         status, data = self._parse_output(self._query(url))
         if status == "OK":
             return data
@@ -89,7 +90,7 @@ class ORIS(object):
         Arguments:
             id          : {int}
         """
-        url = self._make_request("getEvent", {"id":id})
+        url = self._make_request("getEvent", {"id": id})
         status, data = self._parse_output(self._query(url))
         if status == "OK":
             return data
@@ -106,7 +107,7 @@ class ORIS(object):
             entrustop       : {int}
             entrystopout    : {int}
         """
-        url = self._make_request("getEventEntries", {"eventid":eventid, "classid":classid, "classname":classname, "clubid":clubid, "entrystop":entrystop, "entrystopout":entrystopout})
+        url = self._make_request("getEventEntries", {"eventid": eventid, "classid": classid, "classname": classname, "clubid": clubid, "entrystop":entrystop, "entrystopout":entrystopout})
         status, data = self._parse_output(self._query(url))
         if status == "OK":
             return data
